@@ -1,0 +1,957 @@
+/* =====================================================================
+   ESTILOS DE LA BIBLIOTECA  -  estructura tipo Koha + estilo de tu style.css
+   ---------------------------------------------------------------------
+   CÓMO USAR ESTE ARCHIVO
+   - Para cambiar COLORES, LETRA, ESQUINAS o SOMBRAS, edita solo la
+     sección 1 (VARIABLES). Todo el sitio se actualiza solo.
+   - Cada sección tiene un título y dice en qué pantalla se usa.
+   - Para buscar algo rápido, usa Ctrl+F con el número de la sección.
+
+   ÍNDICE
+   1. Variables (colores, letra, esquinas, sombras)   <-- empieza aquí
+   2. Base (reinicio y cosas generales)
+   3. Botones
+   4. Campos de formulario
+   5. Etiquetas (disponible, vencido, etc.)
+   6. Pestañas
+   7. Tablas
+   8. Login
+   9. Catálogo del lector (cliente/)
+   10. Panel del personal (admin/)
+   11. Ventana emergente y aviso
+   12. Pantallas pequeñas (celular)
+   ===================================================================== */
+
+
+/* =====================================================================
+   1. VARIABLES  -  ¡Cambia aquí los colores y la letra!
+   ===================================================================== */
+:root {
+  /* --- Verdes (los de tu style.css) --- */
+  --color-principal:        #16A34A;  /* fondo del login, buscador, logo */
+  --color-principal-oscuro: #15803D;  /* final de los degradados, hover */
+  --color-claro:            #22C55E;  /* inicio de los degradados */
+  --color-resaltado:        #DCFCE7;  /* fondo de etiquetas verdes */
+  --color-fondo-suave:      #F0FDF4;  /* encabezados de tablas y tarjetas */
+  --color-enlace:           #15803D;  /* enlaces y títulos (más oscuro = más legible) */
+
+  /* --- Grises --- */
+  --color-texto:            #1A1A1A;  /* texto normal */
+  --color-texto-suave:      #888888;  /* texto secundario */
+  --color-borde:            #E8E8E8;  /* líneas y bordes */
+  --color-fondo:            #F7F7F7;  /* fondo de la página y de los campos */
+
+  /* --- Rojo (solo errores: "Vencido", "Agotado") --- */
+  --color-error:            #DC2626;
+  --color-error-fondo:      #FEF2F2;
+  --color-error-borde:      #FECACA;
+
+  /* --- Letra y medidas --- */
+  --fuente: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  --tamano-texto: 14px;       /* tamaño base de todo el texto */
+  --ancho-pagina: 1140px;     /* ancho máximo del contenido */
+
+  /* --- Esquinas redondeadas (0 = cuadradas) --- */
+  --radio:        20px;       /* tarjetas grandes (login, ventana emergente) */
+  --radio-medio:  12px;       /* botones y campos */
+  --radio-tarjeta:16px;       /* tarjetas dentro de la página */
+
+  /* --- Sombras --- */
+  --sombra:        0 20px 60px rgba(22, 163, 74, 0.2);   /* login y ventana emergente */
+  --sombra-suave:  0 4px 20px rgba(0, 0, 0, 0.06);       /* tarjetas de la página */
+  --sombra-boton:  0 6px 20px rgba(22, 163, 74, 0.35);   /* botones verdes */
+}
+
+
+/* =====================================================================
+   2. BASE  -  reinicio y reglas generales
+   ===================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font: var(--tamano-texto)/1.5 var(--fuente);
+  color: var(--color-texto);
+  background: var(--color-fondo);
+}
+
+button, input, select {
+  font: inherit;               /* que usen la misma letra que el resto */
+}
+
+a {
+  color: var(--color-enlace);
+}
+a:hover {
+  color: var(--color-principal);
+}
+
+/* Contenedor centrado que usan todas las páginas */
+.wrap {
+  max-width: var(--ancho-pagina);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Títulos */
+h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--color-resaltado);
+}
+h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 26px 0 12px;
+}
+
+.gris   { color: var(--color-texto-suave); }
+.hidden { display: none !important; }       /* oculta un elemento */
+
+/* Contorno visible al navegar con teclado (accesibilidad) */
+:focus-visible {
+  outline: 3px solid rgba(34, 197, 94, 0.5);
+  outline-offset: 2px;
+}
+
+
+/* =====================================================================
+   3. BOTONES
+   .btn          = botón blanco normal
+   .btn-primary  = botón verde con degradado (acción principal)
+   .btn-sm       = botón pequeño (para tablas)
+   .btn-block    = botón de ancho completo (login)
+   ===================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: 1.5px solid var(--color-borde);
+  border-radius: var(--radio-medio);
+  background: #FFFFFF;
+  color: var(--color-texto);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.btn:hover {
+  border-color: var(--color-principal);
+}
+
+.btn-primary {
+  border: 0;
+  background: linear-gradient(135deg, var(--color-claro), var(--color-principal-oscuro));
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: var(--sombra-boton);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(22, 163, 74, 0.45);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  border-radius: 10px;
+}
+.btn-block {
+  width: 100%;
+  margin-top: 6px;
+  padding: 13px;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+
+/* =====================================================================
+   4. CAMPOS DE FORMULARIO
+   .input = cuadro de texto, número o lista desplegable
+   .fg    = un campo con su etiqueta (label) arriba
+   ===================================================================== */
+.input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio-medio);
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  font-weight: 500;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.input:focus {
+  border-color: var(--color-principal);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.12);
+  outline: 0;
+}
+
+.fg {
+  margin-bottom: 14px;
+}
+.fg label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.fila2 {                        /* dos campos lado a lado */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+
+/* =====================================================================
+   5. ETIQUETAS (.badge)  -  forma de píldora
+   b-ok / b-info = verde    b-no = rojo    b-off = gris
+   ===================================================================== */
+.badge {
+  display: inline-block;
+  padding: 3px 11px;
+  border-radius: 99px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.b-ok,
+.b-info {
+  background: var(--color-resaltado);
+  color: var(--color-principal-oscuro);
+}
+.b-no {
+  background: var(--color-error-fondo);
+  color: var(--color-error);
+}
+.b-off {
+  background: var(--color-fondo);
+  color: var(--color-texto-suave);
+}
+
+
+/* =====================================================================
+   6. PESTAÑAS (.nav-tabs)  -  "Catálogo | Mis préstamos"
+   ===================================================================== */
+.nav-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0;
+  list-style: none;
+}
+.nav-tabs button {
+  padding: 9px 18px;
+  border: 1.5px solid var(--color-borde);
+  border-radius: var(--radio-medio);
+  background: #FFFFFF;
+  color: var(--color-texto-suave);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.nav-tabs button:hover {
+  border-color: var(--color-principal);
+}
+.nav-tabs button.active {                 /* pestaña seleccionada */
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--color-claro), var(--color-principal-oscuro));
+  color: #FFFFFF;
+}
+
+
+/* =====================================================================
+   7. TABLAS  -  dentro de una tarjeta blanca con esquinas redondeadas
+   ===================================================================== */
+.tabla-wrap {                             /* la tarjeta; también da scroll lateral en celular */
+  overflow-x: auto;
+  border-radius: var(--radio-tarjeta);
+  background: #FFFFFF;
+  box-shadow: var(--sombra-suave);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th {
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--color-resaltado);
+  background: var(--color-fondo-suave);
+  color: var(--color-principal-oscuro);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+}
+td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--color-borde);
+}
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+tbody tr:hover {
+  background: var(--color-fondo-suave);
+}
+.vacio {                                  /* mensaje cuando no hay datos */
+  padding: 28px 12px;
+  text-align: center;
+  color: var(--color-texto-suave);
+}
+
+
+/* Miniatura de portada en la tabla de libros del admin */
+.mini {
+  width: 40px;
+  height: 56px;
+  border-left: 3px solid rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+
+/* =====================================================================
+   8. LOGIN  (login.html)  -  fondo verde con círculos flotantes
+   ===================================================================== */
+.login-body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--color-principal);
+}
+
+/* Círculos decorativos del fondo */
+.login-shape-1,
+.login-shape-2 {
+  position: fixed;
+  border-radius: 50%;
+  background: #FFFFFF;
+  opacity: 0.15;
+  animation: flotar 8s ease-in-out infinite;
+}
+.login-shape-1 {
+  top: -120px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+}
+.login-shape-2 {
+  bottom: -60px;
+  right: -60px;
+  width: 250px;
+  height: 250px;
+  animation-delay: -3s;
+}
+@keyframes flotar {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-20px) scale(1.05); }
+}
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(40px) scale(0.95); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Tarjeta blanca del login */
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  margin: 20px;
+  padding: 40px 36px 28px;
+  border-radius: var(--radio);
+  background: #FFFFFF;
+  box-shadow: var(--sombra);
+  animation: entrar 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.login-icon {                             /* cuadro verde con el icono del libro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 18px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--color-claro), var(--color-principal-oscuro));
+  color: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(22, 163, 74, 0.4);
+}
+.login-card h1 {
+  margin-bottom: 8px;
+  padding: 0;
+  border: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  text-align: center;
+}
+.login-card h1 span {                     /* la parte "teca" */
+  color: var(--color-principal);
+}
+.sub {
+  margin-bottom: 22px;
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--color-texto-suave);
+}
+
+/* Selector "Lector | Personal" */
+.rol-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 20px;
+  padding: 5px;
+  border-radius: var(--radio-medio);
+  background: var(--color-fondo);
+}
+.rol-switch button {
+  padding: 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--color-texto-suave);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.rol-switch button.active {
+  background: #FFFFFF;
+  color: var(--color-principal-oscuro);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.campo {                                  /* contenedor del campo contraseña */
+  position: relative;
+}
+.btn-ojo {                                /* botón del ojito */
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  border: 0;
+  background: none;
+  color: #BBBBBB;
+  cursor: pointer;
+}
+
+.alert-error {                            /* mensaje "usuario incorrecto" */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--color-error-borde);
+  border-radius: var(--radio-medio);
+  background: var(--color-error-fondo);
+  color: var(--color-error);
+  font-size: 0.85rem;
+}
+.nota {                                   /* "Cuenta de prueba: ..." */
+  margin-top: 18px;
+  font-size: 0.78rem;
+  text-align: center;
+  color: #AAAAAA;
+}
+
+
+/* =====================================================================
+   9. CATÁLOGO DEL LECTOR  (cliente/index.html)
+   ===================================================================== */
+
+/* --- Franja de arriba: "Hola, nombre · Cerrar sesión" --- */
+.mast {
+  border-bottom: 1px solid var(--color-borde);
+  background: #FFFFFF;
+  font-size: 0.82rem;
+}
+.mast-in {
+  display: flex;
+  justify-content: flex-end;
+  gap: 18px;
+  padding: 7px 16px;
+}
+
+/* --- Logo --- */
+.head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 20px 16px 16px;
+}
+.logo {
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--color-principal);
+}
+.logo b {                                 /* la parte "teca" del logo */
+  font-weight: 800;
+  color: var(--color-principal-oscuro);
+}
+.tag {                                    /* "Catálogo en línea" */
+  color: var(--color-texto-suave);
+}
+
+/* --- Barra de búsqueda verde --- */
+.buscador {
+  padding: 16px 0;
+  background: linear-gradient(135deg, var(--color-principal), var(--color-principal-oscuro));
+  box-shadow: 0 6px 20px rgba(22, 163, 74, 0.25);
+}
+.fb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fb select.input {
+  width: auto;
+}
+.fb .input {                              /* campos blancos sobre la barra verde */
+  border-color: transparent;
+  background: #FFFFFF;
+}
+.fb input.input {
+  flex: 1;
+  min-width: 200px;
+}
+.fb .btn-primary {                        /* botón "Buscar": blanco sobre verde */
+  background: #FFFFFF;
+  color: var(--color-principal-oscuro);
+  box-shadow: none;
+}
+
+/* --- Dos columnas: filtros a la izquierda, resultados a la derecha --- */
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;       /* 240px = ancho de los filtros */
+  gap: 24px;
+  align-items: start;
+}
+
+/* --- Tarjetas de filtros (Disponibilidad, Categoría) --- */
+.facet {
+  margin-bottom: 16px;
+  overflow: hidden;
+  border-radius: var(--radio-tarjeta);
+  background: #FFFFFF;
+  box-shadow: var(--sombra-suave);
+}
+.facet h3 {
+  padding: 11px 14px;
+  border-bottom: 2px solid var(--color-resaltado);
+  background: var(--color-fondo-suave);
+  color: var(--color-principal-oscuro);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.facet ul {
+  padding: 8px 14px;
+  list-style: none;
+}
+.facet li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 0;
+}
+.facet li.on a {                          /* filtro seleccionado */
+  font-weight: 700;
+  color: var(--color-texto);
+  text-decoration: none;
+}
+.quitar {                                 /* enlace "Quitar filtros" */
+  display: block;
+  font-size: 0.82rem;
+}
+
+/* --- Barra "Tu búsqueda arrojó N resultados" --- */
+.barra-res {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 10px 16px;
+  border-radius: var(--radio-tarjeta);
+  background: #FFFFFF;
+  box-shadow: var(--sombra-suave);
+}
+.barra-res select {
+  width: auto;
+  padding: 5px 10px;
+}
+
+/* --- Lista de libros (una tarjeta blanca) --- */
+.resultados {
+  padding: 4px 18px;
+  list-style: none;
+  border-radius: var(--radio-tarjeta);
+  background: #FFFFFF;
+  box-shadow: var(--sombra-suave);
+}
+.res {                                    /* un libro: número | portada | datos */
+  display: grid;
+  grid-template-columns: 26px 64px 1fr;
+  gap: 14px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--color-borde);
+}
+.res:last-child {
+  border-bottom: 0;
+}
+.res .n {                                 /* el número 1. 2. 3. */
+  color: var(--color-texto-suave);
+}
+.res h3 {                                 /* título del libro */
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-enlace);
+}
+.res p {
+  font-size: 0.88rem;
+}
+.res .acc {                               /* zona del botón "Pedir préstamo" */
+  margin-top: 10px;
+}
+.thumb {                                  /* portada (el color se pone desde app.js) */
+  display: flex;
+  align-items: flex-end;
+  width: 64px;
+  height: 90px;
+  padding: 6px;
+  border-left: 4px solid rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1.15;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.disp-ok {                                /* "2 de 3 ejemplares disponibles" */
+  font-weight: 600;
+  color: var(--color-principal-oscuro);
+}
+.disp-no {                                /* "Sin ejemplares disponibles" */
+  font-weight: 600;
+  color: var(--color-error);
+}
+
+
+/* =====================================================================
+   10. PANEL DEL PERSONAL  (admin/index.html)
+   ===================================================================== */
+
+/* --- Barra verde de arriba --- */
+.staff-head {
+  background: linear-gradient(135deg, var(--color-principal), var(--color-principal-oscuro));
+  color: #FFFFFF;
+  box-shadow: 0 6px 20px rgba(22, 163, 74, 0.25);
+}
+.staff-in {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 22px;
+  max-width: var(--ancho-pagina);
+  margin: 0 auto;
+  padding: 10px 16px;
+}
+.logo-s {
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+.logo-s small {
+  margin-left: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  opacity: 0.8;
+}
+.staff-nav {
+  display: flex;
+  gap: 6px;
+}
+.staff-nav .tab {
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.staff-nav .tab:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+.staff-nav .tab.active {                  /* sección actual */
+  background: #FFFFFF;
+  color: var(--color-principal-oscuro);
+}
+.user {                                   /* nombre y "Cerrar sesión" */
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-left: auto;
+  font-size: 0.85rem;
+}
+.user a {
+  color: #FFFFFF;
+}
+
+/* --- Contenido --- */
+.staff {
+  padding-top: 24px;
+  padding-bottom: 60px;
+}
+.layout-s {                               /* menú lateral + contenido */
+  display: grid;
+  grid-template-columns: 210px 1fr;       /* 210px = ancho del menú lateral */
+  gap: 24px;
+  align-items: start;
+}
+
+/* --- Menú lateral (Circulación, Catalogación) --- */
+.sidemenu {
+  margin-bottom: 16px;
+  overflow: hidden;
+  border-radius: var(--radio-tarjeta);
+  background: #FFFFFF;
+  box-shadow: var(--sombra-suave);
+}
+.sidemenu h3 {
+  padding: 11px 14px;
+  border-bottom: 2px solid var(--color-resaltado);
+  background: var(--color-fondo-suave);
+  color: var(--color-principal-oscuro);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.sidemenu ul {
+  list-style: none;
+}
+.sidemenu button {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  border: 0;
+  border-left: 4px solid transparent;
+  background: none;
+  color: var(--color-enlace);
+  text-align: left;
+  cursor: pointer;
+}
+.sidemenu button:hover {
+  background: var(--color-fondo);
+}
+.sidemenu button.on {                     /* opción seleccionada */
+  border-left-color: var(--color-principal);
+  background: var(--color-fondo-suave);
+  font-weight: 700;
+  color: var(--color-texto);
+}
+
+/* --- Cuadros de módulos en Inicio --- */
+.modulos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.modulo {
+  padding: 26px 16px;
+  border-radius: var(--radio);
+  background: #FFFFFF;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: var(--sombra-suave);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.modulo:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sombra);
+}
+.modulo .ic {                             /* cuadro verde con el icono */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 14px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--color-claro), var(--color-principal-oscuro));
+  color: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(22, 163, 74, 0.4);
+}
+.modulo b {                               /* nombre del módulo */
+  display: block;
+  font-size: 1.05rem;
+}
+.modulo span.d {                          /* descripción */
+  font-size: 0.85rem;
+  color: var(--color-texto-suave);
+}
+
+/* --- Cuadros de resumen (números) --- */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+}
+.kpi {
+  padding: 16px 18px;
+  border-left: 4px solid var(--color-principal);
+  border-radius: var(--radio-tarjeta);
+  background: #FFFFFF;
+  box-shadow: var(--sombra-suave);
+}
+.kpi b {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+.kpi span {
+  font-size: 0.85rem;
+  color: var(--color-texto-suave);
+}
+.kpi.rojo {                               /* el cuadro de "vencidos" */
+  border-left-color: var(--color-error);
+}
+
+
+/* =====================================================================
+   11. VENTANA EMERGENTE (Nuevo libro) Y AVISO
+   ===================================================================== */
+dialog {
+  width: min(440px, 92vw);
+  margin: auto;
+  padding: 28px;
+  border: 0;
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+dialog::backdrop {                        /* fondo oscuro detrás de la ventana */
+  background: rgba(0, 0, 0, 0.4);
+}
+dialog h2 {
+  margin-top: 0;
+}
+.acciones {                               /* botones Cancelar / Guardar */
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.toast {                                  /* aviso negro que aparece abajo */
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  padding: 12px 20px;
+  border-radius: var(--radio-medio);
+  background: var(--color-texto);
+  color: #FFFFFF;
+  font-size: 0.88rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.toast.show {
+  opacity: 1;
+}
+
+
+/* Vista previa de la portada al agregar un libro */
+.vista {
+  width: 80px;
+  height: 112px;
+  margin-top: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Avisos, enlaces del login y pie del carrito */
+.aviso {
+  margin-bottom: 14px;
+  padding: 12px 16px;
+  border: 1.5px solid var(--color-resaltado);
+  border-radius: var(--radio-medio);
+  background: var(--color-fondo-suave);
+  color: var(--color-principal-oscuro);
+  font-size: 0.9rem;
+}
+.enlaces-login {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 16px;
+  font-size: 0.85rem;
+  text-align: center;
+}
+.pie-carrito {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: var(--radio-tarjeta);
+  background: #FFFFFF;
+  box-shadow: var(--sombra-suave);
+}
+
+
+/* =====================================================================
+   12. PANTALLAS PEQUEÑAS (celular)
+   ===================================================================== */
+@media (max-width: 760px) {
+  .layout,
+  .layout-s {
+    grid-template-columns: 1fr;           /* una sola columna */
+  }
+  .res {
+    grid-template-columns: 22px 56px 1fr;
+  }
+  .thumb {
+    width: 56px;
+    height: 80px;
+  }
+  .login-card {
+    padding: 32px 22px 24px;
+  }
+}
+
+/* Respeta a quien desactiva las animaciones en su sistema */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
